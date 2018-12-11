@@ -1,0 +1,102 @@
+---
+   - name: "set hostname to {{ machine_name }}"
+     hostname:
+        name: "{{ machine_name }}"
+
+   - name: "copy hosts file to /etc/hosts"
+     template:
+        src: hosts.j2
+        dest: /etc/hosts
+        mode: 644
+        owner: root
+        group: root
+
+   - name: "setup local timezone to Asia/Tehran"
+     file:
+        src: /usr/share/zoneinfo/Asia/Tehran
+        dest: /etc/localtime
+
+   - name: "set selinux to permissive mode"
+     selinux:
+        policy: targeted
+        state: permissive
+
+   - name: "remove firewalld"
+     yum: 
+        name: firewalld
+        state: absent
+
+   - name: "stop and disable postfix"
+     service:
+        name: postfix
+        state: stopped
+        enabled: no
+
+   - name: "configuring sshd_config"
+     template: 
+        src: sshd_config.j2
+        dest: /etc/ssh/sshd_config
+        mode: 600
+        owner: root
+        group: root
+     
+   - name: "restart sshd"
+     service:
+        name: sshd
+        state: restarted
+
+   - name: "install epel package"
+     yum:
+        name: "epel-release"
+        state: "latest"
+
+   - name: "install packages"
+     yum:
+        name: "{{ item }}"
+        state: "latest"
+
+     with_items:
+        - atop
+        - htop
+        - iotop
+        - sysstat
+        - nload
+        - net-tools
+        - psmisc
+        - bind-utils
+        - yum-utils
+        - iptraf-ng
+        - ncdu
+        - vim
+        - traceroute
+        - mtr
+        - mlocate
+        - tmux
+        - wget
+        - tcpdump
+        - tree
+        - lsof
+        - ntpdate
+        - httpry
+        - iptables-services
+
+   - name: "start and enable some packages"
+     service:
+        name: "{{ item }}"
+        state: started
+        enabled: yes
+     with_items:
+        - atop
+        - iptables
+
+   - name: "iptables -F"
+     command: "iptables -F"
+
+   - name: "save iptables state"
+     command: "service iptables save"
+
+   - name: "copy ntpdate.sh"
+     copy:
+        src: ntpdate.sh
+        dest: /etc/cron.daily/
+        mode: "a+x"
