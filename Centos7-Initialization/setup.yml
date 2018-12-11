@@ -2,6 +2,6 @@
 
    - hosts: all
      roles:
-        - naming
+        - configure
 
 
