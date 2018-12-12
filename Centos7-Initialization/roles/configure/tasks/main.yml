@@ -94,6 +94,8 @@
 
    - name: "save iptables state"
      command: "service iptables save"
+     args:
+        warn: no
 
    - name: "copy ntpdate.sh"
      copy:
