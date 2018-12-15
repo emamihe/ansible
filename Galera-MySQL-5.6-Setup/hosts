@@ -1,0 +1,20 @@
+all:
+   hosts:
+      galera1:
+         ansible_host: 192.168.11.37
+         ansible_port: 22 
+         vars:
+            server_id: 1
+            bootstrapper: 1
+      galera2:
+         ansible_host: 192.168.11.38
+         ansible_port: 22 
+         vars:
+            server_id: 2
+            bootstrapper: 0
+      galera3:
+         ansible_host: 192.168.11.39
+         ansible_port: 22 
+         vars:
+            server_id: 3
+            bootstrapper: 0

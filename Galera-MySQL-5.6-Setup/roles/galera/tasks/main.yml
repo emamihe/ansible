@@ -1,0 +1,4 @@
+---
+
+   - import_tasks: install_galera.yml
+   - import_tasks: config_galera.yml

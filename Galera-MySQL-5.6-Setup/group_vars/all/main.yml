@@ -1,0 +1,8 @@
+---
+
+galera_cluster_name: "galera1"
+long_query_time: "0.500"
+log_output: "table"
+slow_query_log: "0"
+general_log: "0"
+

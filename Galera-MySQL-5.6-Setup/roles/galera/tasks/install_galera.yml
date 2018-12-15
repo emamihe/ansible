@@ -1,0 +1,33 @@
+---
+  - name: create mysql galera repository
+    yum_repository:
+      name: galera
+      description: Galera yum repo
+      file: galera
+      gpgcheck: yes
+      gpgkey: http://releases.galeracluster.com/GPG-KEY-galeracluster.com
+      baseurl: http://releases.galeracluster.com/galera-3/centos/7/x86_64
+  
+  - name: create mysql galera repository
+    yum_repository:
+      name: mysql-wsrep
+      description: MySQL wsrep yum repo
+      file: galera
+      gpgcheck: yes
+      gpgkey: http://releases.galeracluster.com/GPG-KEY-galeracluster.com
+      baseurl: http://releases.galeracluster.com/mysql-wsrep-5.6/centos/7/x86_64 
+  
+  - name: remove maridb-libs 
+    yum:
+      name: mariadb-libs
+      state: absent
+  
+  - name: install mysql galera dependencies
+    yum:
+      name: "{{ item }}"
+      state: latest
+    register: package_install
+    with_items:
+      - galera-3
+      - mysql-wsrep-5.6
+      - rsync

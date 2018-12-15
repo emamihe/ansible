@@ -1,0 +1,62 @@
+[mysqld]
+user=mysql
+# Disabling symbolic-links is recommended to prevent assorted security risks
+symbolic-links=0
+lower_case_table_names=1
+character_set_server = utf8
+ft_min_word_len=1
+skip-name-resolve
+interactive_timeout = 28800
+transaction-isolation=READ-COMMITTED
+#slow log
+long_query_time= {{ long_query_time }}
+log_output = {{ log_output }}
+slow_query_log= {{ slow_query_log }}
+general_log= {{ general_log }}
+## Base configure info ###
+skip-name-resolve
+lower_case_table_names=1
+open_files_limit = 65000
+max_allowed_packet = 20M
+max_connect_errors = 50000
+max_connections = 8000
+max_user_connections = 6950
+thread_cache_size=64
+thread_stack=262144
+wait_timeout=300
+wsrep_provider= /usr/lib64/galera-3/libgalera_smm.so
+#### query cache ####
+query_cache_size = 100M
+query_cache_limit = 1K
+query_cache_min_res_unit = 1K
+query_cache_type=2
+### innodb config ##
+#innodb_buffer_pool_size = 5G 
+innodb_additional_mem_pool_size = 30M
+innodb_log_file_size=300M
+innodb_log_buffer_size = 20M
+innodb_lock_wait_timeout = 80
+innodb_buffer_pool_instances=12
+innodb_thread_concurrency=20
+innodb_read_io_threads=7
+innodb_write_io_threads=7
+binlog_format=ROW
+bind-address=0.0.0.0
+default_storage_engine=innodb
+innodb_autoinc_lock_mode=2
+innodb_flush_log_at_trx_commit=0
+wsrep_provider_options="gcache.size=100M; gcache.page_size=100M"
+wsrep_cluster_name="{{ galera_cluster_name }}"
+wsrep_cluster_address="gcomm://{{ groups['all'] | map('extract', hostvars, ['ansible_host']) | join(',') }}"
+wsrep_sst_method=rsync
+wsrep_node_name="{{ ansible_hostname }}"
+wsrep_node_address="{{ hostvars[inventory_hostname].ansible_host }}"
+gtid_mode=ON
+log_bin=binlog
+log_slave_updates=1
+enforce_gtid_consistency
+expire_logs_days=7
+server_id={{ hostvars[inventory_hostname].vars.server_id }}
+[mysqld_safe]
+log-error=/var/log/mysqld.log
+pid-file=/var/run/mysqld/mysqld.pid

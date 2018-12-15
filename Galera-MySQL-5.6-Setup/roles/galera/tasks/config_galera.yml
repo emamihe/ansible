@@ -1,0 +1,39 @@
+---
+   - name: "galera config block"
+     block:
+        - name: "config galera my.cnf file"
+          template:
+             src: my.cnf.j2
+             dest: /etc/my.cnf
+             owner: mysql
+             group: mysql
+             mode: 0644
+
+        - name: "make sure data dir not exists "
+          file:
+             path: /var/lib/mysql/
+             state: absent
+ 
+        - name: "create data dir"
+          file:
+             path: /var/lib/mysql
+             state: directory
+             owner: mysql
+             group: mysql
+             mode: 0755
+
+        - name: "initialize db path"
+          command: mysql_install_db --user=mysql --ldata=/var/lib/mysql/
+
+        - name: "starting bootstrapper"
+          command: service mysql start --wsrep-new-cluster
+          args:
+             warn: no
+          when: hostvars[inventory_hostname].vars.bootstrapper == 1
+
+        - name: "starting non bootstrappers"
+          command: service mysql start 
+          args:
+             warn: no
+          when: hostvars[inventory_hostname].vars.bootstrapper == 0
+     when: package_install.changed
