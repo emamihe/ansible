@@ -61,6 +61,7 @@
         - iotop
         - sysstat
         - nload
+        - iftop
         - net-tools
         - psmisc
         - bind-utils
@@ -81,7 +82,7 @@
         - iptables-services
         - bash-completion
         - at
-        - iftop
+        - pv
 
    - name: "start and enable some packages"
      service:
