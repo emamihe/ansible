@@ -80,6 +80,7 @@
         - httpry
         - iptables-services
         - bash-completion
+        - at
 
    - name: "start and enable some packages"
      service:
@@ -89,6 +90,7 @@
      with_items:
         - atop
         - iptables
+        - atd
 
    - name: "iptables -F"
      command: "iptables -F"
