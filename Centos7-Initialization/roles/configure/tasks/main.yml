@@ -79,6 +79,7 @@
         - ntpdate
         - httpry
         - iptables-services
+        - bash-completion
 
    - name: "start and enable some packages"
      service:
@@ -102,3 +103,9 @@
         src: ntpdate.sh
         dest: /etc/cron.daily/
         mode: "a+x"
+
+   - name: "copy tmux bash completion"
+     copy:
+        src: /usr/share/doc/tmux-1.8/examples/bash_completion_tmux.sh
+        dest: /etc/bash_completion.d/tmux
+        remote_src: yes
