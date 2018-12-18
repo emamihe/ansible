@@ -121,3 +121,4 @@
         key: "{{ item }}"
      with_file:
         - public_keys/hamid-jibit-desktop.pub
+        - public_keys/hamid-macbook.pub
