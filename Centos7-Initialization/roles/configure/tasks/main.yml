@@ -113,3 +113,11 @@
         src: /usr/share/doc/tmux-1.8/examples/bash_completion_tmux.sh
         dest: /etc/bash_completion.d/tmux
         remote_src: yes
+
+   - name: "copy public key for ssh"
+     authorized_key:
+        user: root
+        state: present
+        key: "{{ item }}"
+     with_file:
+        - public_keys/hamid-jibit-desktop.pub
